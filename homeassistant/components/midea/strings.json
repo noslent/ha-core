@@ -105,6 +105,23 @@
       "climate_zone2": {
         "name": "Zone 2 thermostat"
       }
+    },
+    "sensor": {
+      "compressor_current": { "name": "Compressor current" },
+      "compressor_frequency": { "name": "Compressor frequency" },
+      "compressor_power": { "name": "Compressor power" },
+      "compressor_voltage": { "name": "Compressor voltage" },
+      "condenser_temperature": { "name": "Condenser temperature" },
+      "discharge_pipe_temperature": { "name": "Discharge pipe temperature" },
+      "evaporator_temperature": { "name": "Evaporator temperature" },
+      "indoor_coil_temperature": { "name": "Indoor coil temperature" },
+      "indoor_fan_speed": { "name": "Indoor fan speed" },
+      "outdoor_ambient_temperature": { "name": "Outdoor ambient temperature" },
+      "outdoor_temperature": { "name": "Outdoor temperature" },
+      "power": { "name": "Power" },
+      "target_compressor_frequency": { "name": "Target compressor frequency" },
+      "target_indoor_fan_speed": { "name": "Target indoor fan speed" },
+      "total_energy": { "name": "Total energy" }
     }
   },
   "exceptions": {
