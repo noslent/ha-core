@@ -98,6 +98,10 @@
     }
   },
   "entity": {
+    "binary_sensor": {
+      "filter_warning": { "name": "Filter warning" },
+      "water_pump": { "name": "Water pump" }
+    },
     "climate": {
       "climate_zone1": {
         "name": "Zone 1 thermostat"
@@ -112,16 +116,24 @@
       "compressor_power": { "name": "Compressor power" },
       "compressor_voltage": { "name": "Compressor voltage" },
       "condenser_temperature": { "name": "Condenser temperature" },
+      "current_energy_consumption": { "name": "Current energy consumption" },
+      "current_operating_time": { "name": "Current operating time" },
       "discharge_pipe_temperature": { "name": "Discharge pipe temperature" },
+      "electrify_time": { "name": "Electrify time" },
+      "error_code": { "name": "Error code" },
       "evaporator_temperature": { "name": "Evaporator temperature" },
       "indoor_coil_temperature": { "name": "Indoor coil temperature" },
       "indoor_fan_speed": { "name": "Indoor fan speed" },
+      "indoor_humidity": { "name": "Indoor humidity" },
+      "indoor_temperature": { "name": "Indoor temperature" },
       "outdoor_ambient_temperature": { "name": "Outdoor ambient temperature" },
       "outdoor_temperature": { "name": "Outdoor temperature" },
       "power": { "name": "Power" },
       "target_compressor_frequency": { "name": "Target compressor frequency" },
       "target_indoor_fan_speed": { "name": "Target indoor fan speed" },
-      "total_energy": { "name": "Total energy" }
+      "total_energy": { "name": "Total energy" },
+      "total_operating_consumption": { "name": "Total operating consumption" },
+      "total_operating_time": { "name": "Total operating time" }
     }
   },
   "exceptions": {
