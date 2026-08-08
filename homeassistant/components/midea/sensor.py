@@ -13,6 +13,7 @@ from homeassistant.components.sensor import (
     SensorStateClass,
 )
 from homeassistant.const import (
+    PERCENTAGE,
     REVOLUTIONS_PER_MINUTE,
     EntityCategory,
     UnitOfElectricCurrent,
@@ -21,6 +22,7 @@ from homeassistant.const import (
     UnitOfFrequency,
     UnitOfPower,
     UnitOfTemperature,
+    UnitOfTime,
 )
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity_platform import AddConfigEntryEntitiesCallback
@@ -38,6 +40,22 @@ class MideaSensorEntityDescription(SensorEntityDescription):
 
 
 AC_SENSORS: tuple[MideaSensorEntityDescription, ...] = (
+    MideaSensorEntityDescription(
+        key=ACAttributes.indoor_temperature,
+        attribute=ACAttributes.indoor_temperature,
+        translation_key="indoor_temperature",
+        device_class=SensorDeviceClass.TEMPERATURE,
+        native_unit_of_measurement=UnitOfTemperature.CELSIUS,
+        state_class=SensorStateClass.MEASUREMENT,
+    ),
+    MideaSensorEntityDescription(
+        key=ACAttributes.indoor_humidity,
+        attribute=ACAttributes.indoor_humidity,
+        translation_key="indoor_humidity",
+        device_class=SensorDeviceClass.HUMIDITY,
+        native_unit_of_measurement=PERCENTAGE,
+        state_class=SensorStateClass.MEASUREMENT,
+    ),
     MideaSensorEntityDescription(
         key=ACAttributes.outdoor_temperature,
         attribute=ACAttributes.outdoor_temperature,
@@ -61,6 +79,62 @@ AC_SENSORS: tuple[MideaSensorEntityDescription, ...] = (
         device_class=SensorDeviceClass.ENERGY,
         native_unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
         state_class=SensorStateClass.TOTAL_INCREASING,
+    ),
+    MideaSensorEntityDescription(
+        key=ACAttributes.current_energy_consumption,
+        attribute=ACAttributes.current_energy_consumption,
+        translation_key="current_energy_consumption",
+        device_class=SensorDeviceClass.ENERGY,
+        native_unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
+        state_class=SensorStateClass.TOTAL,
+        entity_category=EntityCategory.DIAGNOSTIC,
+        entity_registry_enabled_default=False,
+    ),
+    MideaSensorEntityDescription(
+        key=ACAttributes.total_operating_consumption,
+        attribute=ACAttributes.total_operating_consumption,
+        translation_key="total_operating_consumption",
+        device_class=SensorDeviceClass.ENERGY,
+        native_unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
+        state_class=SensorStateClass.TOTAL_INCREASING,
+        entity_category=EntityCategory.DIAGNOSTIC,
+        entity_registry_enabled_default=False,
+    ),
+    *(
+        MideaSensorEntityDescription(
+            key=attribute,
+            attribute=attribute,
+            translation_key=translation_key,
+            device_class=SensorDeviceClass.DURATION,
+            native_unit_of_measurement=UnitOfTime.HOURS,
+            state_class=state_class,
+            entity_category=EntityCategory.DIAGNOSTIC,
+            entity_registry_enabled_default=False,
+        )
+        for attribute, translation_key, state_class in (
+            (
+                ACAttributes.electrify_time,
+                "electrify_time",
+                SensorStateClass.TOTAL_INCREASING,
+            ),
+            (
+                ACAttributes.total_operating_time,
+                "total_operating_time",
+                SensorStateClass.TOTAL_INCREASING,
+            ),
+            (
+                ACAttributes.current_operating_time,
+                "current_operating_time",
+                SensorStateClass.TOTAL,
+            ),
+        )
+    ),
+    MideaSensorEntityDescription(
+        key=ACAttributes.error_code,
+        attribute=ACAttributes.error_code,
+        translation_key="error_code",
+        entity_category=EntityCategory.DIAGNOSTIC,
+        entity_registry_enabled_default=False,
     ),
     MideaSensorEntityDescription(
         key=ACAttributes.compressor_frequency,
@@ -191,5 +265,10 @@ class MideaSensor(MideaEntity, SensorEntity):
         """Return the sensor value."""
         value = self._device.get_attribute(self.entity_description.attribute)
         if not isinstance(value, (int, float)) or isinstance(value, bool):
+            return None
+        if (
+            self.entity_description.attribute is ACAttributes.indoor_humidity
+            and value in {0, 0xFF}
+        ):
             return None
         return value
